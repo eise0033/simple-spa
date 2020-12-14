@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toggle State with JS &amp; CSS</title>
+    <style>
+      #player {
+        width: 500px;
+        height: 200px;
+        background-color: #333;
+        border-radius: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .buttons {
+        text-align: center;
+        padding: 0.2rem 0;
+      }
+      .btn {
+        border: none;
+        padding: 0.2rem 2rem;
+        background-color: cornflowerblue;
+        color: white;
+      }
+      .btn {
+        cursor: pointer;
+        outline: none;
+      }
+      .animation {
+        height: 80%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      /***** Default styles ********/
+      .buttons .pause {
+        display: none;
+      }
+      .animation > * {
+        animation-name: spin;
+        animation-duration: 3s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-play-state: paused;
+        transform-origin: 50% center;
+        border: 5px solid white;
+        border-radius: 50%;
+      }
+
+      /***** Alternate styles ********/
+      .playing .pause {
+        display: inline-block;
+      }
+      .playing .play {
+        display: none;
+      }
+      .playing .animation > * {
+        animation-play-state: running;
+      }
+      /********** svg / animation **************/
+      .iconic * {
+        fill: gold;
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player" class="playing">
+      <div class="animation">
+        <img class="iconic" src="media.svg" alt="media svg icon" />
+      </div>
+      <div class="buttons">
+        <button class="btn play">PLAY</button>
+        <button class="btn pause">PAUSE</button>
+      </div>
+    </div>
+    <script src="js/iconic.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .querySelector('.buttons')
+          .addEventListener('click', handleButtons);
+      });
+
+      function handleButtons(ev) {
+        if (ev.target.classList.contains('btn')) {
+          document.getElementById('player').classList.toggle('playing');
+        }
+        if (ev.target.classList.contains('play')) {
+          //do the play stuff
+        }
+        if (ev.target.classList.contains('pause')) {
+          //do the pause stuff
+        }
+      }
+    </script>
+  </body>
+</html>

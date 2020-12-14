@@ -9,52 +9,43 @@ let df = document.createDocumentFragment();
 const APP = {
   init: () => {
     //this function runs when the page loads
-    let div = document.getElementById('content');
-    df.append(div);
-    SEARCH();
-  },
+    SEARCH;
+}
 };
 
 //search is for anything to do with the fetch api
-const SEARCH = function () {
-  let url = "".concat(baseURL, 'configuration?api_key=', api_key);
-  fetch(url)
-  .then((result) => {
-    return result
-  })
-  .then((data) => {
-    console.log(data);
-    searchURL = data.images.secure_base_url;
-    configData = data.images;
-    SEARCH("Scarlett");
-  })
-  .catch(function(err) {
-    alert(err);
-  });
+const SEARCH = {
+  results: ["Scarlett Johansson", "Brad Pitt", "Dwayne Johnson", "Tom Hanks", "Will Smith", "Johnny Depp", "Arnold Schwarzenegger"],
+findActors: (ev) => {
+ev.preventDefault();
+let txt = document.getElementById('search').value.trim();
+//user has filled in search word
+let url = APP.baseURL.concat('&query=', txt);
+fetch(url)
+.then((resp)=>{
+if(resp.ok){
+return resp.json();
+}else{
+throw new Error('Failed to fetch search results');
 }
+});
+.then((data)=>{
+//data is the object returned from the API
+//save in the SEARCH.results property
+SEARCH.results = data.results;
+ACTORS;
+    })
+  }
+};
 
 //actors is for changes connected to content in the actors section
-const ACTORS = function(keyword){
-  let url = "".concat(baseURL, 'search/person?api_key=', api_key, '&query=', keyword);
-  fetch(url)
-  .then((result) => {
-    return result;
-  })
-  .then((data) => {
-    document.getElementById('actors').innerHTML = data.images;
-  });
+const ACTORS = {
+  cards: 
 };
 
 //media is for changes connected to content in the media section
-const MEDIA = function(){
-  let url = "".concat(baseURL, 'movie/767-478682', '?api_key=', api_key);
-  fetch(url)
-  .then((result) => {
-    return result;
-  })
-  .then((data) => {
-    document.getElementById('media').innerHTML = data.images;
-  });
+const MEDIA = {
+
 };
 
 //storage is for working with localstorage
