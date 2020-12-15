@@ -8,18 +8,21 @@ const APP = {
   df: document.createDocumentFragment(),
   init: () => {
     //this function runs when the page loads
+    let form = document.getElementById('search-form');
+    form.addEventListener("submit", SEARCH.findActors);
     SEARCH;
 }
 };
 
 //search is for anything to do with the fetch api
 const SEARCH = {
-  results: ["Scarlett Johansson", "Brad Pitt", "Dwayne Johnson", "Tom Hanks", "Will Smith", "Johnny Depp", "Arnold Schwarzenegger"],
+  results: [],
   findActors: (ev) => {
+    console.log("inside findActors");
     ev.preventDefault();
     let txt = document.getElementById('search').value.trim();
 //user has filled in search word
-    let url = APP.baseURL.concat('&query=', txt);
+    let url = APP.baseURL.concat(`search/person?api_key=${APP.api_key}&query=`, txt);
     fetch(url)
     .then((resp)=>{
       if(resp.ok){
@@ -31,31 +34,52 @@ const SEARCH = {
     .then((data)=>{
 //data is the object returned from the API
 //save in the SEARCH.results property
+      console.log(data);
       SEARCH.results = data.results;
-      ACTORS;
+      ACTORS.displayActors();
     })
   }
 };
 
 //actors is for changes connected to content in the actors section
 const ACTORS = {
-  cards: (ev) => {
-    ev.preventDefault();
-    let txt = document.getElementById('actors');
-    let url = APP.baseURL.concat('&query=', txt);
-    fetch(url)
-    .then((resp)=>{
-      if(resp.ok){
-        return resp.json();
-      }else{
-        throw new Error('Failed to fetch actors');
+  displayActors: function() {
+    SEARCH.results.forEach(Actors => {
+      let img = document.createElement("img");
+      let name = document.createElement("p");
+      let popularity = document.createElement("p");
+      let div = document.createElement("div");
+      let content = document.getElementById("actors").getElementsByClassName("content")[0];
+      name.innerText = Actors.name;
+      popularity.innerText = Actors.popularity;
+      img.src = `https://image.tmdb.org/t/p/w500${Actors.profile_path}`;
+      img.className = "actor-image";
+      if(Actors.profile_path == null){
+        img.src = "./img/avatar-icon.jpg";
       }
-    })
-    .then((data)=>{
-      ACTORS.results = data.results;
-      MEDIA;
-    })
-  }
+      div.append(img);
+      div.append(name);
+      div.append(popularity);
+      content.append(div);
+    });
+  },
+  // cards: (ev) => {
+  //   ev.preventDefault();
+  //   let txt = document.getElementById('actors');
+  //   let url = APP.baseURL.concat('&query=', txt);
+  //   fetch(url)
+  //   .then((resp)=>{
+  //     if(resp.ok){
+  //       return resp.json();
+  //     }else{
+  //       throw new Error('Failed to fetch actors');
+  //     }
+  //   })
+  //   .then((data)=>{
+  //     ACTORS.results = data.results;
+  //     MEDIA;
+  //   })
+  // }
 };
 
 //media is for changes connected to content in the media section
@@ -76,3 +100,5 @@ const NAV = {
 //Start everything running
 
 document.addEventListener("DOMContentLoaded", APP.init);
+
+//known for property display it on media page: movie image, title, description. Change active page to display media content. Search up classlist.add and Classlist.remove. To remove active class from actors and add it to media class.

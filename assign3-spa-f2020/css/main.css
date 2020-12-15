@@ -190,3 +190,8 @@ header form {
     width: 42px;
   }
 }
+
+.actor-image {
+  width: 100px;
+  height: auto;
+}
