@@ -16,6 +16,7 @@ const APP = {
     document.querySelector('div').addEventListener('click', APP.loadActors);
     SEARCH;
     STORAGE.loadMedia();
+    NAV;
 }
 };
 
@@ -202,8 +203,13 @@ const STORAGE = {
 
 //nav is for anything connected to the history api and location
 const NAV = {
+  onpopstate: function(ev) {
+    ev.preventDefault();
+    alert(`location: ${document.location}`);
+    history.go({page: 1});
+  },
   //this will be used in Assign 4
-}
+};
 
 //Start everything running
 
